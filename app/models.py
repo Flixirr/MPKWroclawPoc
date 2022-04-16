@@ -1,49 +1,46 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Float
-from sqlalchemy.orm import relationship
-from flask_appbuilder import Model
+from enum import unique
+from mongoengine import Document
+from mongoengine import DateTimeField, StringField, ReferenceField, IntField, FloatField
 
-class City(Model):
-    city_id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique = True, nullable=False)
+class City(Document):
+    city_id = IntField(primary_key=True)
+    name = StringField(max_length=255, unique=True, required=True)
 
     def __repr__(self):
         return self.city_id + ' ' + self.name
 
-class Route(Model):
-    route_id = Column(String(10), primary_key=True)
-    short_name = Column(String(50))
-    description = Column(String(255))
+class Route(Document):
+    route_id = StringField(max_lenght=10, primary_key=True)
+    short_name = StringField(max_lenght=50)
+    description = StringField(max_lenght=255)
 
     def __repr__(self):
         return self.route_id + ' ' + self.short_name + ' ' + self.description
 
-class Stop(Model):
-    stop_id = Column(Integer, primary_key=True)
-    code = Column(Integer)
-    name = Column(String(255))
-    latitude = Column(Float)
-    longitude = Column(Float)
+class Stop(Document):
+    stop_id = IntField(primary_key=True)
+    code = IntField()
+    name = StringField(255)
+    latitude = FloatField()
+    longitude = FloatField()
 
     def __repr__(self):
         return self.stop_id + ' ' + self.code + ' ' + self.name
 
-class Trip(Model):
-    route_id = Column(String(10), ForeignKey('route.route_id'))
-    route = relationship("Route")
-    service_id = Column(Integer)
-    trip_id = Column(String(20), primary_key=True)
-    trip_headsign = Column(String(255))
-    direction_id = Column(Integer)
+class Trip(Document):
+    route = ReferenceField(Route)
+    service_id = IntField()
+    trip_id = StringField(max_length=20, primary_key=True)
+    trip_headsign = StringField(255)
+    direction_id = IntField()
 
     def __repr__(self):
         return self.trip_id + ' ' + self.route_id + ' ' + self.trip_headsign + ' ' + self.direction_id
 
-class StopTimes(Model):
-    trip_id = Column(String(20), ForeignKey('trip.trip_id'))
-    trip = relationship("Trip")
-    stop_id = Column(Integer, ForeignKey('stop.stop_id'))
-    stop = relationship("Stop")
-    departure_time = Column(DateTime)
+class StopTimes(Document):
+    trip = ReferenceField(Trip)
+    stop = ReferenceField(Stop)
+    departure_time = DateTimeField()
 
     def __repr__(self):
-        return self.trip_id + ' ' + self.stop_id + ' ' + self.departure_time
+        return self.trip.trip_id + ' ' + self.stop_id + ' ' + self.departure_time
