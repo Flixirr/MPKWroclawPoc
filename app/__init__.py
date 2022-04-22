@@ -9,7 +9,8 @@ db = MongoEngine()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+
+    db.init_app(app)
     
     appbuilder = AppBuilder(app, security_manager_class=SecurityManager)
 
