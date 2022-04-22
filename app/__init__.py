@@ -2,12 +2,15 @@ from flask import Flask
 from flask_appbuilder import AppBuilder
 from flask_appbuilder.security.mongoengine.manager import SecurityManager
 from flask_mongoengine import MongoEngine
+from config import Config
 
-app = Flask(__name__)
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'mpk',
-    'host': 'mongodb://localhost',
-    'port': 5000
-}
 db = MongoEngine()
-appbuilder = AppBuilder(app, security_manager_class=SecurityManager)
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    
+    
+    appbuilder = AppBuilder(app, security_manager_class=SecurityManager)
+
+    return app

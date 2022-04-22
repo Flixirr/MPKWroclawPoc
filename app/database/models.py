@@ -1,4 +1,3 @@
-from enum import unique
 from mongoengine import Document
 from mongoengine import DateTimeField, StringField, ReferenceField, IntField, FloatField
 
