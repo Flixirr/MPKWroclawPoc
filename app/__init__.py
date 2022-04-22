@@ -5,11 +5,9 @@ from flask_mongoengine import MongoEngine
 
 app = Flask(__name__)
 app.config['MONGODB_SETTINGS'] = {
-    'db': 'mpk-poc',
-    'host': '127.0.0.1',
-    'port': 27017
+    'db': 'mpk',
+    'host': 'mongodb://localhost',
+    'port': 5000
 }
 db = MongoEngine()
 appbuilder = AppBuilder(app, security_manager_class=SecurityManager)
-
-from app import models, views
