@@ -12,25 +12,9 @@ class CalculateDistance(MethodView):
     def get(self):
         request_body = request.get_json()
 
-        age = int(request_body['age'])
-        
-        if age > 0 and age < 16:
-            distance = 1000
-        elif age < 26:
-            distance = 5000
-        elif age < 35:
-            distance = 2000
-        elif age < 51:
-            distance = 1000
-        elif age < 66:
-            distance = 500
-        elif age > 65:
-            distance = 100
-        else:
-            return Response({'Age does not meet requirements: age > 0'}, status=400)
-
         lat = request_body['lat']
         lon = request_body['lon']
+        distance = int(request_body['distance'])
 
         if 'time' not in request_body:
             departure_time = datetime.now()
